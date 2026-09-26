@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pinterest Pin GPT</title>
+<style>
+:root{--bg:#14161c;--card:#1e2129;--card2:#242832;--border:#373c48;--text:#eee9e2;--muted:#9aa3b2;--muted2:#747d8c;--accent:#df9b4b;--accent2:#c98539;--input:#262a33;--pill:#342a21;--pilltext:#e2ad74;--good:#79c99e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;padding:27px 18px 45px}
+.app{max-width:900px;margin:auto}.themes{text-align:center;margin-bottom:24px}.themes span{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.06em;margin-right:7px}
+.swatch{width:31px;height:31px;border:2px solid transparent;border-radius:50%;margin:0 3px;cursor:pointer}.swatch.active{border-color:#fff;box-shadow:0 0 0 2px var(--bg)}
+h1{font-family:Georgia,"Times New Roman",serif;text-align:center;font-size:48px;font-weight:400;margin:0;color:var(--text)}
+.subtitle{text-align:center;color:var(--muted);font-size:14px;line-height:1.6;max-width:650px;margin:14px auto 31px}
+.card{background:var(--card);border-radius:8px;border-top:5px solid var(--accent);padding:31px 34px;box-shadow:0 12px 35px rgba(0,0,0,.28)}
+.field{margin-bottom:20px}.row{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+label{display:block;font-size:11px;letter-spacing:.055em;text-transform:uppercase;font-weight:850;margin-bottom:9px;color:#d6d8df}.optional{color:var(--muted2);font-weight:400;text-transform:none;letter-spacing:0}
+input,textarea,select{width:100%;background:var(--input);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:14px 15px;font:16px Georgia,"Times New Roman",serif;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}textarea{min-height:180px;resize:vertical;line-height:1.48}
+.help{font-size:12px;color:var(--muted2);margin-top:15px;line-height:1.5}
+.generate{width:100%;background:var(--accent);border:0;border-radius:7px;padding:18px;color:#111820;font-size:20px;font-weight:850;cursor:pointer;margin-top:15px}.generate:hover{background:var(--accent2)}.generate:disabled{opacity:.62;cursor:wait}
+.error{display:none;margin-top:18px;padding:16px 18px;border-radius:7px;background:#422d24;color:#ff9a73;font-size:14px}
+.results{display:none;margin-top:28px}.results.show{display:block}.version{margin-top:28px}.version:first-child{margin-top:0}
+.version-title{font:400 26px Georgia,serif;margin:0 0 4px}.angle{font-size:11px;color:var(--accent);font-weight:850;text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px}
+.item{background:var(--card2);border:1px solid var(--border);border-radius:7px;padding:15px 16px;margin-bottom:11px}.top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.item h3{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:0 0 4px}.count{font-size:10px;color:var(--good)}.txt{white-space:pre-wrap;font-size:14px;line-height:1.55;margin-top:8px}
+.copy{background:transparent;color:var(--accent);border:1px solid #4b5160;border-radius:5px;padding:6px 10px;font-size:10px;font-weight:850;cursor:pointer}.copy:hover{background:#2b303a}
+.pill{display:inline-block;background:var(--pill);color:var(--pilltext);border-radius:999px;padding:6px 10px;font-size:11px;margin:7px 5px 0 0}.shared{margin-top:25px}
+.footer{text-align:center;color:var(--muted2);font-size:11px;margin-top:18px}
+@media(max-width:650px){.row{grid-template-columns:1fr;gap:0}.card{padding:24px 18px}h1{font-size:39px}textarea{min-height:155px}}
+</style>
+</head>
+<body>
+<div class="app">
+ <div class="themes"><span>COLOR:</span>
+  <button class="swatch active" data-theme="dark" style="background:#df9b4b"></button>
+  <button class="swatch" data-theme="blush" style="background:#a8442c"></button>
+  <button class="swatch" data-theme="navy" style="background:#355a75"></button>
+  <button class="swatch" data-theme="sand" style="background:#8e7931"></button>
+ </div>
+ <h1>Pinterest Pin GPT</h1>
+ <div class="subtitle">Create Pinterest-ready Amazon affiliate copy. Paste the product title and verified details, choose your settings, and generate several pin angles.</div>
+ <div class="card">
+  <div class="field"><label>Amazon Product Title</label><input id="productTitle" placeholder="Paste the Amazon product title"></div>
+  <div class="field"><label>Product Details & Key Features</label><textarea id="productDetails" placeholder="Paste the Amazon product description and verified bullet features"></textarea><div class="help">The generator uses the details you provide and avoids inventing ratings, prices, specs, or product claims.</div></div>
+  <div class="row">
+   <div class="field"><label>Niche</label><select id="niche"><option>Home Organization</option><option>Home Decor</option><option>Kitchen & Dining</option><option>Outdoor & Patio</option><option>Beauty & Skincare</option><option>Electronics & Gadgets</option><option>Gifts</option><option>General Amazon Product</option></select></div>
+   <div class="field"><label>Audience <span class="optional">(optional)</span></label><input id="audience" placeholder="e.g. small-space renters"></div>
+  </div>
+  <div class="row">
+   <div class="field"><label>Tone</label><select id="tone"><option>Friendly and helpful</option><option>Warm and encouraging</option><option>Minimal and modern</option><option>Professional and informative</option><option>Playful and casual</option><option>Direct and persuasive</option></select></div>
+   <div class="field"><label>Pin Versions</label><select id="versions"><option value="3">3 versions</option><option value="4">4 versions</option><option value="5">5 versions</option></select></div>
+  </div>
+  <div class="row">
+   <div class="field"><label>English Style</label><select id="englishStyle"><option>US English</option><option>UK English</option><option>Neutral English</option></select></div>
+   <div class="field"><label>Extra Instructions <span class="optional">(optional)</span></label><input id="extraInstructions" placeholder="e.g. focus on gifting"></div>
+  </div>
+  <button id="generate" class="generate">Generate pin content</button>
+  <div id="error" class="error"></div>
+  <div id="results" class="results"></div>
+ </div>
+ <div class="footer">Pinterest Pin GPT · Amazon affiliate copy generator</div>
+</div>
+<script>
+const themes={
+ dark:{bg:"#14161c",card:"#1e2129",card2:"#242832",border:"#373c48",text:"#eee9e2",muted:"#9aa3b2",muted2:"#747d8c",accent:"#df9b4b",accent2:"#c98539",input:"#262a33",pill:"#342a21",pilltext:"#e2ad74"},
+ blush:{bg:"#f7eee9",card:"#fff",card2:"#fcf7f4",border:"#dfd1ca",text:"#202631",muted:"#6d7886",muted2:"#9b8f89",accent:"#a8442c",accent2:"#8d3824",input:"#fff",pill:"#f0ded3",pilltext:"#7d3b27"},
+ navy:{bg:"#eef2f5",card:"#fff",card2:"#f5f7f9",border:"#d3dce3",text:"#172838",muted:"#5b7185",muted2:"#93a0ac",accent:"#355a75",accent2:"#29465c",input:"#fff",pill:"#dde7ee",pilltext:"#355a75"},
+ sand:{bg:"#f5efe0",card:"#fffdf7",card2:"#faf5e6",border:"#e3d9b8",text:"#2e2a17",muted:"#817448",muted2:"#a89968",accent:"#8e7931",accent2:"#756427",input:"#fffdf7",pill:"#eee3bd",pilltext:"#5c4f22"}
+};
+document.querySelectorAll(".swatch").forEach(b=>b.onclick=()=>{document.querySelectorAll(".swatch").forEach(x=>x.classList.remove("active"));b.classList.add("active");for(const[k,v]of Object.entries(themes[b.dataset.theme]))document.documentElement.style.setProperty("--"+k,v)});
+const el=id=>document.getElementById(id), val=id=>el(id).value.trim();
+const esc=s=>{const d=document.createElement("div");d.textContent=String(s??"");return d.innerHTML};
+async function copy(text,b){try{await navigator.clipboard.writeText(text)}catch{const t=document.createElement("textarea");t.value=text;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove()}const old=b.textContent;b.textContent="Copied!";setTimeout(()=>b.textContent=old,1100)}
+function item(label,text,count=""){const d=document.createElement("div");d.className="item";d.innerHTML=`<div class="top"><div><h3>${esc(label)}</h3>${count?`<div class="count">${esc(count)}</div>`:""}</div><button class="copy">Copy</button></div><div class="txt">${esc(text)}</div>`;d.querySelector(".copy").onclick=e=>copy(text,e.currentTarget);return d}
+function pills(label,arr){const d=document.createElement("div");d.className="item";d.innerHTML=`<div class="top"><h3>${esc(label)}</h3><button class="copy">Copy</button></div><div>${(arr||[]).map(x=>`<span class="pill">${esc(x)}</span>`).join("")}</div>`;d.querySelector(".copy").onclick=e=>copy((arr||[]).join(", "),e.currentTarget);return d}
+function render(d){const out=el("results");out.innerHTML="";(d.versions||[]).forEach((v,i)=>{const s=document.createElement("section");s.className="version";s.innerHTML=`<div class="version-title">Pin Version ${i+1}</div><div class="angle">${esc(v.angle)}</div>`;s.append(item("Pin Title",v.title,`${v.titleCharacterCount} / 100 characters`));s.append(item("Full Pin Description · Ready to Paste",v.fullDescription,`${v.descriptionCharacterCount} / 500 characters`));s.append(pills("SEO Keyword Phrases",v.seoKeywords));out.append(s)});const sh=document.createElement("section");sh.className="shared";sh.append(item("Affiliate Disclosure",d.disclosure));sh.append(item("Suggested Pinterest Boards",(d.boardNames||[]).join("\n")));sh.append(pills("Pinterest Search Terms",d.searchTerms));out.append(sh);out.classList.add("show")}
+el("generate").onclick=async()=>{const err=el("error"),btn=el("generate");err.style.display="none";const body={productTitle:val("productTitle"),productDetails:val("productDetails"),niche:val("niche"),audience:val("audience"),tone:val("tone"),versions:Number(val("versions")),englishStyle:val("englishStyle"),extraInstructions:val("extraInstructions")};if(!body.productTitle||!body.productDetails){err.textContent="Please enter the Amazon product title and verified product details.";err.style.display="block";return}btn.disabled=true;btn.textContent="Generating...";try{const r=await fetch("/api/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});const d=await r.json();if(!r.ok)throw new Error(d.error||"Generation failed.");render(d)}catch(e){err.textContent=e.message||"Generation failed.";err.style.display="block"}finally{btn.disabled=false;btn.textContent="Generate pin content"}};
+</script>
+</body></html>
